@@ -1,0 +1,1 @@
+This is a really basic helper class for WordPress themes and plugins that allows their authors to easily manage meta boxes. You just need to pass an id and a configuration array to add_smart_meta_box(), specify what kind of fields you need (any number of text, textarea, checkbox, select, radio) and it will deal with rendering a meta box an saving the fields for you.
