@@ -56,7 +56,7 @@ class SmartMetaBox {
 				$value = isset($field['default']) ? $default : '';
 			}
 			echo '<tr>', '<th style="width:20%"><label for="', $id, '">', $name, '</label></th>', '<td>';
-			include "fields/$type.php";
+			include "smart_meta_fields/$type.php";
 			if (isset($desc)) {
 				echo '&nbsp;<span class="description">' . $desc . '</span>';
 			}
