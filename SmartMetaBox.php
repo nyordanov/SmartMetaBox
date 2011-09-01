@@ -89,14 +89,15 @@ class SmartMetaBox {
 		}
 		foreach ($this->meta_box['fields'] as $field) {
 			$name = self::$prefix . $field['id'];
+            $sanitize_callback = (isset($field['sanitize_callback'])) ? $field['sanitize_callback'] : '';
 			if (isset($_POST[$name]) || isset($_FILES[$name])) {
 				$old = self::get($field['id'], true, $post_id);
 				$new = $_POST[$name];
 				if ($new != $old) {
-					self::set($field['id'], $new, $post_id);
+					self::set($field['id'], $new, $post_id, $sanitize_callback);
 				}
 			} elseif ($field['type'] == 'checkbox') {
-				self::set($field['id'], 'false', $post_id);
+				self::set($field['id'], 'false', $post_id, $sanitize_callback);
 			} else {
 				self::delete($field['id'], $name);
 			}
@@ -106,9 +107,12 @@ class SmartMetaBox {
 		global $post;
 		return get_post_meta(isset($post_id) ? $post_id : $post->ID, self::$prefix . $name, $single);
 	}
-	static function set($name, $new, $post_id = null) {
+	static function set($name, $new, $post_id = null, $sanitize_callback = '') {
 		global $post;
-		return update_post_meta(isset($post_id) ? $post_id : $post->ID, self::$prefix . $name, $new);
+        $id = (isset($post_id)) ? $post_id : $post->ID;
+        $meta_key = self::$prefix . $name;
+        $new = ($sanitize_callback != '' && is_callable($sanitize_callback)) ? call_user_func($sanitize_callback, $new, $meta_key, $id) : $new;
+		return update_post_meta($id, $meta_key, $new);
 	}
 	static function delete($name, $post_id = null) {
 		global $post;
