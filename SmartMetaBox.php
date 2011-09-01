@@ -89,7 +89,7 @@ class SmartMetaBox {
 		}
 		foreach ($this->meta_box['fields'] as $field) {
 			$name = self::$prefix . $field['id'];
-            $sanitize_callback = (isset($field['sanitize_callback'])) ? $field['sanitize_callback'] : '';
+			$sanitize_callback = (isset($field['sanitize_callback'])) ? $field['sanitize_callback'] : '';
 			if (isset($_POST[$name]) || isset($_FILES[$name])) {
 				$old = self::get($field['id'], true, $post_id);
 				$new = $_POST[$name];
@@ -109,9 +109,10 @@ class SmartMetaBox {
 	}
 	static function set($name, $new, $post_id = null, $sanitize_callback = '') {
 		global $post;
-        $id = (isset($post_id)) ? $post_id : $post->ID;
-        $meta_key = self::$prefix . $name;
-        $new = ($sanitize_callback != '' && is_callable($sanitize_callback)) ? call_user_func($sanitize_callback, $new, $meta_key, $id) : $new;
+        
+		$id = (isset($post_id)) ? $post_id : $post->ID;
+		$meta_key = self::$prefix . $name;
+		$new = ($sanitize_callback != '' && is_callable($sanitize_callback)) ? call_user_func($sanitize_callback, $new, $meta_key, $id) : $new;
 		return update_post_meta($id, $meta_key, $new);
 	}
 	static function delete($name, $post_id = null) {
@@ -122,3 +123,4 @@ class SmartMetaBox {
 function add_smart_meta_box($id, $opts) {
 	new SmartMetaBox($id, $opts);
 }
+
