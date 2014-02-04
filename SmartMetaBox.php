@@ -10,6 +10,26 @@
  *
  */
 
+//Added to try and add Image upload functionallity
+function smart_meta_scripts() {
+	wp_enqueue_script('media-upload');
+	wp_enqueue_script('thickbox');
+	wp_register_script('smart_meta_image_js', get_bloginfo('template_directory') .'/includes/js/smart_meta_image.js', array('jquery', 'media-upload', 'thickbox'));
+	wp_register_script('smart_meta_file_js', get_bloginfo('template_directory') .'/includes/js/smart_meta_file.js', array('jquery', 'media-upload', 'thickbox'));
+	wp_enqueue_script('smart_meta_image_js');
+	wp_enqueue_script('smart_meta_file_js');
+}
+
+function smart_admin_styles() {
+	wp_enqueue_style('thickbox');
+}
+
+add_action('admin_print_scripts', 'smart_meta_scripts');
+add_action('admin_print_styles', 'smart_admin_styles');
+
+
+//Start original Class
+
 class SmartMetaBox {
 	
 	protected $meta_box;
